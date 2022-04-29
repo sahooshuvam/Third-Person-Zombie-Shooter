@@ -1,0 +1,20 @@
+..................Third Person Zombie Shooter Game.................
+GamePlay>>
+We have to added terrain in the game.. player and Zombie added to that Enviroment.. 
+In some place places there are fire pit if player walking through the firepit player health will decreases. At first Zombie is searching for the Player When player is Nearer to that Zombie Zombie will try to attack in that time. In that Time Player have to kill the zombie.. 
+
+Win Condition >>
+If player Kill the all the zombies and pass the Zombie and reach to the final reaching postion then player will win..
+
+Lose Condition>>
+If The Zombie is able to kill the Player then Game over.
+
+1. First person's Camera Movement
+2. Shooting with raycast
+3. Enemy Movement and Attack AI
+4. Health and Damage System.
+5. Dead or GameOver Functionality
+6. Swap or weapon switch 
+7. Amination pickups
+8. FlashLight and Battery pickup
+9. Audio
