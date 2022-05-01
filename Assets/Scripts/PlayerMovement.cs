@@ -19,15 +19,14 @@ public class PlayerMovement : MonoBehaviour
     int maxHealth = 100;
     int maxMedkitHealth = 50;
 
-    int ammo = 30;
-    int maxAmmo = 30;
-    int maxAmmokitAmmo = 30;
+  
 
 
     private void Awake()
     {
         characterController = GetComponent<CharacterController>();
         animator = GetComponent<Animator>();
+        healthValue.text = health.ToString();
     }
   
 
@@ -64,16 +63,5 @@ public class PlayerMovement : MonoBehaviour
             Destroy(other.gameObject);
         }
 
-        if (other.gameObject.tag == "AmmoBox")
-        {
-            int ammoNeeded = maxAmmo - ammo;
-            if (maxAmmokitAmmo >= ammoNeeded)
-                ammo = ammo + ammoNeeded;
-            else
-                ammo = ammo + maxAmmokitAmmo;
-
-            Debug.Log("Ammo :" + ammo);
-            Destroy(other.gameObject);
-        }
     }
 }

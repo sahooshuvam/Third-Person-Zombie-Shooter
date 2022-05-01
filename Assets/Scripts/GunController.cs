@@ -2,14 +2,24 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GunController : MonoBehaviour
 {
     [SerializeField] Transform firePoint;
     public GameObject gunflash;
-   
+
+    int ammo = 30;
+    int maxAmmo = 30;
+    int maxAmmokitAmmo = 30;
 
 
+    public Text ammoText;
+
+    private void Start()
+    {
+        ammoText.text = ammo.ToString();
+    }
     // Update is called once per frame
     void Update()
     {
@@ -35,6 +45,21 @@ public class GunController : MonoBehaviour
             {
                 hitZombie.SetActive(false);
             }
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "AmmoBox")
+        {
+            int ammoNeeded = maxAmmo - ammo;
+            if (maxAmmokitAmmo >= ammoNeeded)
+                ammo = ammo + ammoNeeded;
+            else
+                ammo = ammo + maxAmmokitAmmo;
+
+            ammoText.text = ammo.ToString();
+            Destroy(other.gameObject);
         }
     }
 }
