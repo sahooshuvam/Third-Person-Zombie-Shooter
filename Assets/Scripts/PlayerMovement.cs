@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -10,6 +11,17 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float playerSpeed;
     [SerializeField] float turnSmoothTime = 0.1f;
     [SerializeField] float turnSmoothVelocity;
+
+    [SerializeField] private Text scoreValue;
+    [SerializeField] private Text healthValue;
+
+    int health = 100;
+    int maxHealth = 100;
+    int maxMedkitHealth = 50;
+
+    int ammo = 30;
+    int maxAmmo = 30;
+    int maxAmmokitAmmo = 30;
 
 
     private void Awake()
@@ -35,6 +47,33 @@ public class PlayerMovement : MonoBehaviour
             Vector3 moveDir = Quaternion.Euler(0f,targetAngle,0f) * Vector3.forward;
             characterController.Move(moveDir.normalized *playerSpeed *Time.deltaTime);
             animator.SetFloat("Speed",direction.magnitude);
+        }
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "MedBox")
+        {
+            int healthNeeded = maxHealth - health;
+            if (maxMedkitHealth >= healthNeeded)
+                health = health + healthNeeded;
+            else
+                health = health + maxMedkitHealth;
+
+            healthValue.text = health.ToString();
+            Debug.Log("Health:" + health);
+            Destroy(other.gameObject);
+        }
+
+        if (other.gameObject.tag == "AmmoBox")
+        {
+            int ammoNeeded = maxAmmo - ammo;
+            if (maxAmmokitAmmo >= ammoNeeded)
+                ammo = ammo + ammoNeeded;
+            else
+                ammo = ammo + maxAmmokitAmmo;
+
+            Debug.Log("Ammo :" + ammo);
+            Destroy(other.gameObject);
         }
     }
 }
