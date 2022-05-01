@@ -7,12 +7,13 @@ public class ZombieController : MonoBehaviour
 {
     NavMeshAgent agent;
     Animator animator;
-    public Transform player;
+    Transform player;
     State currentState;
     void Start()
     {
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
+        player = GameObject.FindGameObjectWithTag("Player").transform;
         currentState = new Idle(this.gameObject, agent, animator, player);
     }
 
