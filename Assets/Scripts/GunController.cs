@@ -25,9 +25,15 @@ public class GunController : MonoBehaviour
     {
         if (Input.GetButton("Fire1"))
         {
-            FireGun();
-            gunflash.SetActive(true);
-            Invoke("StopGunFlash", 0.5f);
+            if (ammo >0)
+            {
+                FireGun();
+                ammo--;
+                gunflash.SetActive(true);
+                Invoke("StopGunFlash", 0.5f);
+                ammoText.text = ammo.ToString();
+            }
+            
         }
     }
     private void StopGunFlash()
@@ -37,12 +43,15 @@ public class GunController : MonoBehaviour
 
     private void FireGun()
     {
+        Ray ray = new Ray(firePoint.position, firePoint.right);
+        Debug.DrawRay(ray.origin, ray.direction * 30f, Color.red, 2f);
         RaycastHit hitInfo;
-        if (Physics.Raycast(firePoint.position, firePoint.forward, out hitInfo, 100f))
+        if (Physics.Raycast(ray, out hitInfo, 100f))
         {
             GameObject hitZombie = hitInfo.collider.gameObject;
             if (hitZombie.tag == "Zombie")
             {
+                Debug.Log(hitZombie);
                 hitZombie.SetActive(false);
             }
         }

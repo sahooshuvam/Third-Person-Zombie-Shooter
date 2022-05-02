@@ -1698,6 +1698,7 @@ GameObject:
   - component: {fileID: 4858005932450810756}
   - component: {fileID: 1329117731}
   - component: {fileID: 5082655686108456510}
+  - component: {fileID: 2813387118406306208}
   m_Layer: 0
   m_Name: zombieman
   m_TagString: Zombie
@@ -1774,7 +1775,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124ce70e3fd95e5408eb7d4ea6e1f7f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+--- !u!136 &2813387118406306208
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5176861845160572960}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.5
+  m_Height: 2
+  m_Direction: 1
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!1 &5215620285009353330
 GameObject:
   m_ObjectHideFlags: 0
