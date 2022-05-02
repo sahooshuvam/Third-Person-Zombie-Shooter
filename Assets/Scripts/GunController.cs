@@ -8,6 +8,7 @@ public class GunController : MonoBehaviour
 {
     [SerializeField] Transform firePoint;
     public GameObject gunflash;
+    Animator animator;
 
     int ammo = 30;
     int maxAmmo = 30;
@@ -18,6 +19,7 @@ public class GunController : MonoBehaviour
 
     private void Start()
     {
+        animator = GetComponent<Animator>();
         ammoText.text = ammo.ToString();
     }
     // Update is called once per frame
@@ -28,6 +30,7 @@ public class GunController : MonoBehaviour
             if (ammo >0)
             {
                 FireGun();
+                animator.SetTrigger("isShooting");
                 ammo--;
                 gunflash.SetActive(true);
                 Invoke("StopGunFlash", 0.5f);
@@ -43,7 +46,7 @@ public class GunController : MonoBehaviour
 
     private void FireGun()
     {
-        Ray ray = new Ray(firePoint.position, firePoint.right);
+        Ray ray = new Ray(firePoint.position, firePoint.forward);
         Debug.DrawRay(ray.origin, ray.direction * 30f, Color.red, 2f);
         RaycastHit hitInfo;
         if (Physics.Raycast(ray, out hitInfo, 100f))
