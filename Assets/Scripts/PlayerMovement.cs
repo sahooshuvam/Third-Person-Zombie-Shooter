@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class PlayerMovement : MonoBehaviour
@@ -78,6 +79,10 @@ public class PlayerMovement : MonoBehaviour
             ObjectPooling.Instance.AddToPool(10);
         }
 
+        if (other.gameObject.tag == "FinishPoint")
+        {
+                SceneManager.LoadScene("GameOver");
+        }
     }
     public void TakeHit(int value)
     {

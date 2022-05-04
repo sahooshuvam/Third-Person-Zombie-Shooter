@@ -8,6 +8,8 @@ TagManager:
   - Zombie
   - AmmoBox
   - MedBox
+  - SpawningZombie
+  - FinishPoint
   layers:
   - Default
   - TransparentFX
