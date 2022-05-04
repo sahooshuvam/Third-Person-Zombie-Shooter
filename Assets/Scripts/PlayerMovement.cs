@@ -20,8 +20,8 @@ public class PlayerMovement : MonoBehaviour
     int maxHealth = 100;
     int maxMedkitHealth = 50;
 
-  
-
+    public GameObject loadingPanel;
+    float time = 0f;
 
     private void Awake()
     {
@@ -29,11 +29,17 @@ public class PlayerMovement : MonoBehaviour
         animator = GetComponent<Animator>();
         healthValue.text = health.ToString();
     }
-  
+
 
     // Update is called once per frame
     void Update()
     {
+        time = time + Time.deltaTime;
+        if (time >=5f)
+        {
+            loadingPanel.SetActive(false);
+        }
+
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
         var mouseHorizontal = Input.GetAxis("Mouse X");
