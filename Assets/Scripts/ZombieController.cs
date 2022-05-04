@@ -33,6 +33,13 @@ public class ZombieController : MonoBehaviour
         }
         //create a method name random sound,when player takes damageS   
     }
+
+    public void KillZombie()
+    {
+        animator.SetBool("isDead", true);
+        currentState = new Dead(this.gameObject, agent, animator, player);
+    }
+    
 }
 public class State
 {
@@ -271,7 +278,7 @@ public class Dead : State
     }
     public override void EnterMethod()
     {
-        animator.SetBool("isDead", true);
+        //animator.SetBool("isDead", true);
         base.EnterMethod();
     }
     public override void UpdateMethod()

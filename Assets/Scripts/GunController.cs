@@ -17,14 +17,12 @@ public class GunController : MonoBehaviour
     [SerializeField] private Text ammoText;
 
     ScoreManager score;
-    public ZombieController zombie;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         ammoText.text = ammo.ToString();
-        score = GameObject.FindGameObjectWithTag("Player").GetComponent<ScoreManager>();
-      
+        score = GameObject.FindGameObjectWithTag("Player").GetComponent<ScoreManager>();      
     }
     // Update is called once per frame
     void Update()
@@ -59,7 +57,7 @@ public class GunController : MonoBehaviour
             if (hitZombie.tag == "Zombie")
             {
                 score.ScoreCalculator(10);
-                hitZombie.SetActive(false);
+                hitZombie.GetComponent<ZombieController>().KillZombie();
             }
         }
     }
