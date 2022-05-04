@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         time = time + Time.deltaTime;
-        if (time >=5f)
+        if (time >=3f)
         {
             loadingPanel.SetActive(false);
         }

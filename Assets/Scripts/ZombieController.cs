@@ -10,6 +10,8 @@ public class ZombieController : MonoBehaviour
     Transform player;
     State currentState;
     GameObject playerPrefab;
+
+    public GameObject zombieRagdoll;
     void Start()
     {
         playerPrefab = GameObject.FindGameObjectWithTag("Player");
@@ -37,7 +39,7 @@ public class ZombieController : MonoBehaviour
     public void KillZombie()
     {
         animator.SetBool("isDead", true);
-        currentState = new Dead(this.gameObject, agent, animator, player);
+        //this.gameObject.SetActive(false);
     }
     
 }
@@ -268,33 +270,33 @@ public class Attack : State
     }
 }
 
-public class Dead : State
-{
-    float time;
-    public Dead(GameObject _zombie, NavMeshAgent _agent, Animator _animator, Transform _playerTransform) : base(_zombie, _agent, _animator, _playerTransform)
-    {
-        stateName = STATE.DEATH;
+//public class Dead : State
+//{
+//    float time;
+//    public Dead(GameObject _zombie, NavMeshAgent _agent, Animator _animator, Transform _playerTransform) : base(_zombie, _agent, _animator, _playerTransform)
+//    {
+//        stateName = STATE.DEATH;
 
-    }
-    public override void EnterMethod()
-    {
-        //animator.SetBool("isDead", true);
-        base.EnterMethod();
-    }
-    public override void UpdateMethod()
-    {
-        time = time + Time.deltaTime;
-        if (time > 4f)
-        {
-            time = 0f;
-            nextState = new Idle(zombie, agent, animator, playerTransform);
-            eventStage = EVENTS.EXIT;
-        }
-    }
-    public override void ExitMethod()
-    {
-        animator.SetBool("isDead", false);
-        base.ExitMethod();
-    }
-}
+//    }
+//    public override void EnterMethod()
+//    {
+//        //animator.SetBool("isDead", true);
+//        base.EnterMethod();
+//    }
+//    public override void UpdateMethod()
+//    {
+//        time = time + Time.deltaTime;
+//        if (time > 4f)
+//        {
+//            time = 0f;
+//            nextState = new Idle(zombie, agent, animator, playerTransform);
+//            eventStage = EVENTS.EXIT;
+//        }
+//    }
+//    public override void ExitMethod()
+//    {
+//        animator.SetBool("isDead", false);
+//        base.ExitMethod();
+//    }
+//}
 

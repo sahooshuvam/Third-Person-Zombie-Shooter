@@ -1715,7 +1715,7 @@ Transform:
   m_GameObject: {fileID: 5176861845160572960}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 2.3047647, y: -0.4097333, z: 1.9122086}
-  m_LocalScale: {x: 1.25, y: 1.25, z: 1.25}
+  m_LocalScale: {x: 1.4, y: 1.4, z: 1.4}
   m_Children:
   - {fileID: 3154154243523757876}
   - {fileID: 8727568619207890829}
@@ -1775,6 +1775,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 124ce70e3fd95e5408eb7d4ea6e1f7f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  zombieRagdoll: {fileID: 2855189125168911378, guid: 69ea7694e1d353d4aa27e9327da332ca, type: 3}
 --- !u!136 &2813387118406306208
 CapsuleCollider:
   m_ObjectHideFlags: 0

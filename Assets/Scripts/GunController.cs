@@ -57,7 +57,18 @@ public class GunController : MonoBehaviour
             if (hitZombie.tag == "Zombie")
             {
                 score.ScoreCalculator(10);
-                hitZombie.GetComponent<ZombieController>().KillZombie();
+                if (UnityEngine.Random.Range(0, 10) < 5)
+                {
+                    GameObject tempRd = hitZombie.GetComponent<ZombieController>().zombieRagdoll;
+                    GameObject newTempRd = Instantiate(tempRd, hitZombie.transform.position, hitZombie.transform.rotation);
+                    newTempRd.transform.Find("Zombie:Hips").GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 10000);
+                    //newTempRd.SetActive(false);
+                }
+                else
+                {
+                    hitZombie.GetComponent<ZombieController>().KillZombie();
+
+                }
             }
         }
     }
