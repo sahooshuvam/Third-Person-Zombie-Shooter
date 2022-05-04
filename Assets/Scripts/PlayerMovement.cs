@@ -73,6 +73,11 @@ public class PlayerMovement : MonoBehaviour
             Destroy(other.gameObject);
         }
 
+        if (other.gameObject.tag == "SpawningZombie")
+        {
+            ObjectPooling.Instance.AddToPool(10);
+        }
+
     }
     public void TakeHit(int value)
     {
