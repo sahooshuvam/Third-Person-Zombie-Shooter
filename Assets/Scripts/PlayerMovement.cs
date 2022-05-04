@@ -12,7 +12,6 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] float turnSmoothTime = 0.1f;
     [SerializeField] float turnSmoothVelocity;
 
-    [SerializeField] private Text scoreValue;
     [SerializeField] private Text healthValue;
 
     int health = 100;
@@ -63,5 +62,13 @@ public class PlayerMovement : MonoBehaviour
             Destroy(other.gameObject);
         }
 
+    }
+    public void TakeHit(int value)
+    {
+        if (health >0)
+        {
+            health = Mathf.Clamp(health - value, 0,maxHealth);
+            healthValue.text = health.ToString();
+        }
     }
 }

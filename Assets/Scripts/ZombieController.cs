@@ -9,8 +9,10 @@ public class ZombieController : MonoBehaviour
     Animator animator;
     Transform player;
     State currentState;
+    GameObject playerPrefab;
     void Start()
     {
+        playerPrefab = GameObject.FindGameObjectWithTag("Player");
         agent = GetComponent<NavMeshAgent>();
         animator = GetComponent<Animator>();
         player = GameObject.FindGameObjectWithTag("Player").transform;
@@ -21,6 +23,15 @@ public class ZombieController : MonoBehaviour
     void Update()
     {
         currentState = currentState.Process();
+    }
+    int damageAmount = 5;
+    public void DamagePlayer()
+    {
+        if ( playerPrefab!= null)
+        {
+            playerPrefab.GetComponent<PlayerMovement>().TakeHit(damageAmount);
+        }
+        //create a method name random sound,when player takes damageS   
     }
 }
 public class State
@@ -35,9 +46,8 @@ public class State
     public Animator animator;
     public Transform playerTransform;
 
-    public float visualDistance = 10f;
-    public float visualAngle = 30f;
-    public float shootingDistance = 5f;
+    public float walkingSpeed = 1f;
+    public float runningSpeed = 3f;
 
     public State nextState;
 
@@ -79,25 +89,41 @@ public class State
         }
         return this;
     }
+    public float DistanceToPlayer()
+    {
+        return Vector3.Distance( zombie.transform.position, playerTransform.position);
+    }
     public bool CanSeePlayer()
     {
-        Vector3 direction = playerTransform.position - zombie.transform.position;
-        float angle = Vector3.Angle(direction, zombie.transform.forward);
-        if (direction.magnitude < visualDistance && angle < visualAngle)
+        if (DistanceToPlayer() < 12f)
         {
             return true;
         }
-        return false;
+        else
+        {
+            return false;
+        }
     }
-    public bool EnemyCanAttackPlayer()
+    public bool CanNotSeePlayer()
     {
-        Vector3 direction = playerTransform.position - zombie.transform.position;
-        if (direction.magnitude < shootingDistance)
+        if (DistanceToPlayer() > 12f)
         {
             return true;
         }
-        return false;
+        else
+        {
+            return false;
+        }
+
     }
+    public void TurnOffAllTriggerAnim()//All animation are off
+    {
+        animator.SetBool("isWalking", false);
+        animator.SetBool("isAttacking", false);
+        animator.SetBool("isRunning", false);
+        animator.SetBool("isDead", false);
+    }
+   
 }
 
 public class Idle : State
@@ -105,13 +131,13 @@ public class Idle : State
     public Idle(GameObject _zombie, NavMeshAgent _agent, Animator _animator, Transform _playerTransform) : base(_zombie, _agent, _animator, _playerTransform)
     {
         stateName = STATE.IDLE;
+        agent.enabled = true;
 
     }
     public override void EnterMethod()
     {
-        animator.SetTrigger("isWalking");
+        animator.SetBool("isWalking", true);
         base.EnterMethod();
-
     }
     public override void UpdateMethod()
     {
@@ -128,7 +154,7 @@ public class Idle : State
     }
     public override void ExitMethod()
     {
-        animator.ResetTrigger("isWalking");
+        animator.SetBool("isWalking",false);
         base.ExitMethod();
     }
 }
@@ -138,30 +164,32 @@ public class Wonder : State
     public Wonder(GameObject _zombie, NavMeshAgent _agent, Animator _animator, Transform _playerTransform) : base(_zombie, _agent, _animator, _playerTransform)
     {
         stateName = STATE.WONDER;
-
     }
     public override void EnterMethod()
     {
-        animator.SetTrigger("isWalking");
+        animator.SetBool("isWalking",true);
         base.EnterMethod();
 
     }
     public override void UpdateMethod()
     {
-        if (CanSeePlayer())
-        {
-            nextState = new Chase(zombie, agent, animator, playerTransform);
-            eventStage = EVENTS.EXIT;
-        }
-        else
-        {
-            nextState = new Wonder(zombie, agent, animator, playerTransform);
-            eventStage = EVENTS.EXIT;
-        }
+            float randValueX = zombie.transform.position.x + Random.Range(-5f, 5f);
+            float randValueZ = zombie.transform.position.z + Random.Range(-5f, 5f);
+            float ValueY = zombie.transform.position.y;
+            Vector3 destination = new Vector3(randValueX, ValueY, randValueZ);
+            agent.SetDestination(destination);
+            agent.stoppingDistance = 0f;
+            agent.speed = walkingSpeed;
+        
+            if (CanSeePlayer())
+            {
+                nextState = new Chase(zombie, agent, animator, playerTransform);
+                eventStage = EVENTS.EXIT;
+            }
     }
     public override void ExitMethod()
     {
-        animator.ResetTrigger("isWalking");
+        animator.SetBool("isWalking",false);
         base.ExitMethod();
     }
 }
@@ -175,26 +203,31 @@ public class Chase : State
     }
     public override void EnterMethod()
     {
-        animator.SetTrigger("isRunning");
+        animator.SetBool("isRunning",true);
         base.EnterMethod();
-
     }
     public override void UpdateMethod()
     {
-        if (CanSeePlayer())
+        agent.SetDestination(playerTransform.position);
+        zombie.transform.LookAt(playerTransform.position);
+        agent.stoppingDistance = 2f;
+        agent.speed = runningSpeed;
+       
+        if (agent.remainingDistance <= agent.stoppingDistance && !agent.pathPending)
         {
             nextState = new Attack(zombie, agent, animator, playerTransform);
             eventStage = EVENTS.EXIT;
         }
-        else
+        if (CanNotSeePlayer())
         {
             nextState = new Wonder(zombie, agent, animator, playerTransform);
+            agent.ResetPath();
             eventStage = EVENTS.EXIT;
         }
     }
     public override void ExitMethod()
     {
-        animator.ResetTrigger("isWalking");
+       animator.SetBool("isRunning",false);
         base.ExitMethod();
     }
 }
@@ -208,26 +241,52 @@ public class Attack : State
     }
     public override void EnterMethod()
     {
-        animator.SetTrigger("isAttacking");
+        animator.SetBool("isAttacking", true);
         base.EnterMethod();
-
     }
     public override void UpdateMethod()
     {
-        if (CanSeePlayer())
+        zombie.transform.LookAt(playerTransform.position);//Zombies should look at Player
+        
+        if (DistanceToPlayer() > agent.stoppingDistance + 1)
         {
-            nextState = new Attack(zombie, agent, animator, playerTransform);
-            eventStage = EVENTS.EXIT;
-        }
-        else
-        {
-            nextState = new Wonder(zombie, agent, animator, playerTransform);
+            nextState = new Idle(zombie, agent, animator, playerTransform);
             eventStage = EVENTS.EXIT;
         }
     }
     public override void ExitMethod()
     {
-        animator.ResetTrigger("isWalking");
+        animator.SetBool("isAttacking",false);
+        base.ExitMethod();
+    }
+}
+
+public class Dead : State
+{
+    float time;
+    public Dead(GameObject _zombie, NavMeshAgent _agent, Animator _animator, Transform _playerTransform) : base(_zombie, _agent, _animator, _playerTransform)
+    {
+        stateName = STATE.DEATH;
+
+    }
+    public override void EnterMethod()
+    {
+        animator.SetBool("isDead", true);
+        base.EnterMethod();
+    }
+    public override void UpdateMethod()
+    {
+        time = time + Time.deltaTime;
+        if (time > 4f)
+        {
+            time = 0f;
+            nextState = new Idle(zombie, agent, animator, playerTransform);
+            eventStage = EVENTS.EXIT;
+        }
+    }
+    public override void ExitMethod()
+    {
+        animator.SetBool("isDead", false);
         base.ExitMethod();
     }
 }

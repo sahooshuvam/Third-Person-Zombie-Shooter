@@ -14,13 +14,17 @@ public class GunController : MonoBehaviour
     int maxAmmo = 30;
     int maxAmmokitAmmo = 30;
 
+    [SerializeField] private Text ammoText;
 
-    public Text ammoText;
+    ScoreManager score;
+    public ZombieController zombie;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         ammoText.text = ammo.ToString();
+        score = GameObject.FindGameObjectWithTag("Player").GetComponent<ScoreManager>();
+      
     }
     // Update is called once per frame
     void Update()
@@ -54,7 +58,7 @@ public class GunController : MonoBehaviour
             GameObject hitZombie = hitInfo.collider.gameObject;
             if (hitZombie.tag == "Zombie")
             {
-                Debug.Log(hitZombie);
+                score.ScoreCalculator(10);
                 hitZombie.SetActive(false);
             }
         }
