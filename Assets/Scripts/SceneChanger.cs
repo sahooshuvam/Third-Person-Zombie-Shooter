@@ -21,4 +21,9 @@ public class SceneChanger : MonoBehaviour
     {
         instructionPanel.SetActive(false);
     }
+
+    public void GotoMenuScene()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
 }
