@@ -62,7 +62,7 @@ public class GunController : MonoBehaviour
                     GameObject tempRd = hitZombie.GetComponent<ZombieController>().zombieRagdoll;
                     GameObject newTempRd = Instantiate(tempRd, hitZombie.transform.position, hitZombie.transform.rotation);
                     newTempRd.transform.Find("Zombie:Hips").GetComponent<Rigidbody>().AddForce(Camera.main.transform.forward * 10000);
-                    //newTempRd.SetActive(false);
+                    hitZombie.SetActive(false);
                 }
                 else
                 {

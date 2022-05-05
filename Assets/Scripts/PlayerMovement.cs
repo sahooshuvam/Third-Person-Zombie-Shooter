@@ -79,7 +79,7 @@ public class PlayerMovement : MonoBehaviour
             ObjectPooling.Instance.AddToPool(10);
         }
 
-        if (other.gameObject.tag == "FinishPoint")
+        if ((other.gameObject.tag == "FinishPoint") && (this.gameObject.GetComponent<ScoreManager>().score >= 100))
         {
                 SceneManager.LoadScene("GameOver");
         }
